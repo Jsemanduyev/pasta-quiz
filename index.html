@@ -12,7 +12,11 @@
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #FFF8E7 0%, #FFE5B4 100%);
+            background-image: 
+                linear-gradient(135deg, #FFF8E7 0%, #FFE5B4 100%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a574' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
         }
         .question {
             background: white;
@@ -89,6 +93,12 @@
 </head>
 <body>
     <h1>🍝 What Pasta Shape Are You? 🍝</h1>
+
+    <p id="question-counter" style="text-align: center; color: #666; font-size: 18px; margin: 10px 0;">
+    Question <span id="current-q">1</span> of 3
+    </p>
+
+    <div class="progress">
     
     <div class="progress">
         <div class="progress-bar" id="progress" style="width: 0%"></div>
@@ -96,23 +106,23 @@
     
     <div class="question active" id="q1">
         <h3>What's your ideal Friday night?</h3>
-        <button onclick="answer(1, 'a')">Cozy night in with a book</button>
-        <button onclick="answer(1, 'b')">Wild party with friends</button>
-        <button onclick="answer(1, 'c')">Organized game night</button>
+        <button onclick="answer(1, 'a')">📚 Cozy night in with a book</button>
+        <button onclick="answer(1, 'b')">🎉 Wild party with friends</button>
+        <button onclick="answer(1, 'c')">🎲 Organized game night</button>
     </div>
 
     <div class="question" id="q2">
         <h3>Pick your weekend activity:</h3>
-        <button onclick="answer(2, 'sports')">Playing sports</button>
-        <button onclick="answer(2, 'cooking')">Cooking elaborate meals</button>
-        <button onclick="answer(2, 'netflix')">Netflix marathon</button>
+        <button onclick="answer(2, 'sports')">⚽ Playing sports</button>
+        <button onclick="answer(2, 'cooking')">👨‍🍳 Cooking elaborate meals</button>
+        <button onclick="answer(2, 'netflix')">📺 Netflix marathon</button>
     </div>
 
     <div class="question" id="q3">
         <h3>Your favorite season?</h3>
-        <button onclick="answer(3, 'spring')">Spring - new beginnings</button>
-        <button onclick="answer(3, 'summer')">Summer - fun and energy</button>
-        <button onclick="answer(3, 'fall')">Fall - cozy and comfortable</button>
+        <button onclick="answer(3, 'spring')">🌸 Spring - new beginnings</button>
+        <button onclick="answer(3, 'summer')">☀️ Summer - fun and energy</button>
+        <button onclick="answer(3, 'fall')">🍂 Fall - cozy and comfortable</button>
     </div>
 
     <div id="result">
@@ -164,9 +174,11 @@
             document.getElementById('progress').style.width = progress + '%';
             
             // Move to next question or show result
+            // Move to next question or show result
             if (questionNum < totalQuestions) {
                 document.getElementById('q' + questionNum).classList.remove('active');
                 document.getElementById('q' + (questionNum + 1)).classList.add('active');
+                document.getElementById('current-q').textContent = questionNum + 1; // Update counter
             } else {
                 showResult();
             }
@@ -176,6 +188,7 @@
             // Hide all questions
             document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
             document.querySelector('.progress').style.display = 'none';
+            document.getElementById('question-counter').style.display = 'none';
             
             let pasta, description, imagePath;
 
@@ -288,7 +301,13 @@
         ctx.arc(540, 400, 250, 0, Math.PI * 2);
         ctx.closePath();
         ctx.clip();
-        ctx.drawImage(img, 290, 150, 500, 500);
+        // Calculate crop to fit image properly (cover the circle)
+        const scale = Math.max(500 / img.width, 500 / img.height);
+        const scaledWidth = img.width * scale;
+        const scaledHeight = img.height * scale;
+        const offsetX = 290 + (500 - scaledWidth) / 2;
+        const offsetY = 150 + (500 - scaledHeight) / 2;
+        ctx.drawImage(img, 0, 0, img.width, img.height, offsetX, offsetY, scaledWidth, scaledHeight);
         ctx.restore();
         
         // White circle border
