@@ -178,15 +178,23 @@
             document.querySelector('.progress').style.display = 'none';
             
             let pasta, description, imagePath;
-            
-            if (score <= 4) {
+
+            if (score <= 3) {
                 pasta = "Fettuccine";
                 description = "Long, elegant, and sophisticated. You appreciate the finer things in life.";
                 imagePath = "images/fettuccine.jpg";
+            } else if (score <= 5) {
+                pasta = "Ravioli";
+                description = "Stuffed with surprises! You're complex and full of hidden depths.";
+                imagePath = "images/ravioli.jpg";
             } else if (score <= 7) {
                 pasta = "Penne";
                 description = "Structured and reliable. People can always count on you.";
                 imagePath = "images/penne.jpg";
+            } else if (score <= 9) {
+                pasta = "Farfalle";
+                description = "Playful and creative like a bow-tie! You bring style to everything you do.";
+                imagePath = "images/farfalle.jpg";
             } else {
                 pasta = "Rotini";
                 description = "Spiraled and full of energy! You bring excitement wherever you go.";
